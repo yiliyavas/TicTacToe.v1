@@ -32,22 +32,47 @@ void TicTac::resetMoves() { //empties the array
 }
 
 
-		//Attention
-//not sure if it would work for the given array
-// 
+
 //should sort the array by row and columns
 //first row and then column
 //should be done so that veerything will be displayed in drawing later
 
 void TicTac::bubbleSort(UserMove* m[], int l) {
 	UserMove* temp;
-	for (int iteration = 1; iteration < l; iteration++) {
-		for (int index = 0; index < l - iteration; index++) {
-			if (m[index] > m[index + 1]) {
-				temp = m[index];
-				m[index] = m[index + 1];
-				m[index + 1] = temp;
+	int temp1, temp2;
+	char temp3;
+	for (int i = 0; i < l; i++) {
+		for (int j = 0; j < l - 1; j++) {
+			if ((m[j]->getRows() > m[j + 1]->getRows()) &&
+				m[j]->getColumns() <= m[j + 1]->getColumns()) {
 
+				temp1 = m[j]->getRows();
+				temp2 = m[j]->getColumns();
+				temp3 = m[j]->getUserMove();
+
+				m[j]->setRows(m[j+1]->getRows());
+				m[j]->setColumns(m[j+1]->getColumns());
+				m[j]->setUserMove(m[j+1]->getUserMove());
+
+				m[j+1]->setRows(temp1);
+				m[j+1]->setColumns(temp2);
+				m[j+1]->setUserMove(temp3);
+			}
+
+			else if ((m[j]->getRows() == m[j + 1]->getRows()) &&
+				m[j]->getColumns() > m[j + 1]->getColumns()) {
+
+				temp1 = m[j]->getRows();
+				temp2 = m[j]->getColumns();
+				temp3 = m[j]->getUserMove();
+
+				m[j]->setRows(m[j + 1]->getRows());
+				m[j]->setColumns(m[j + 1]->getColumns());
+				m[j]->setUserMove(m[j + 1]->getUserMove());
+
+				m[j+1]->setRows(temp1);
+				m[j+1]->setColumns(temp2);
+				m[j+1]->setUserMove(temp3);
 			}
 		}
 	}
@@ -69,7 +94,7 @@ void TicTac::startAttempt() {
 								{2, 1}, {2, 2}, {2, 3},
 								{3, 1}, {3, 2}, {3, 3} };
 
-	int madeMoves[9][3];
+
 
 	//runs within the bounds of the array
 	int i = 0;
@@ -91,21 +116,15 @@ void TicTac::startAttempt() {
 			//checks if moves are repeated and clears array with that specific movement
 			for (int j = 0; j < 9; j++) {
 				if (u1 == allowedMoves[j][0] && u2 == allowedMoves[j][1]) {
-					allowedMoves[j][0] = NULL;
+					allowedMoves[j][0] = NULL; //clears allowed move from list
 					allowedMoves[j][1] = NULL;
 					found = true; //sets that entered can be made
 					
 					//puts automatically x or o as values based on odd or even number of moves
 					if (i % 2 == 0) {
-						madeMoves[j][0] = u1;
-						madeMoves[j][1] = u2;
-						madeMoves[j][2] = 'x';
 						ptr = new UserMove('x', u1 - 1, u2 - 1);
 					}
 					else {
-						madeMoves[j][0] = u1;
-						madeMoves[j][1] = u2;
-						madeMoves[j][2] = 'o';
 						ptr = new UserMove('o', u1 - 1, u2 - 1);
 					}
 
@@ -122,12 +141,6 @@ void TicTac::startAttempt() {
 			
 		}
 		
-	}
-
-	for (int i = 0; i < 9; i++) {
-		if (i % 3 == 0)
-			cout << endl;
-		cout << char(madeMoves[i][2]) << " ";
 	}
 	
 }
